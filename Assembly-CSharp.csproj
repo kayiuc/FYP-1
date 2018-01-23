@@ -204,9 +204,9 @@
      <Compile Include="Assets\PhotonChatApi\ChatState.cs" />
      <Compile Include="Assets\PhotonChatApi\ChatUserStatus.cs" />
      <Compile Include="Assets\PhotonChatApi\IChatClientListener.cs" />
-     <Compile Include="Assets\Scripts\CharacterControl.cs" />
      <Compile Include="Assets\Scripts\MainMenu.cs" />
      <Compile Include="Assets\Scripts\PhotonNetworkManager.cs" />
+     <Compile Include="Assets\Scripts\SimpleButton.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
@@ -307,9 +307,7 @@
      <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\NotoSans - License.txt" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Sprite.shader" />
      <None Include="Assets\BattleDragon\readme.txt" />
-     <None Include="Assets\Standard Assets\Fonts\OpenSans\License!.txt" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile.shader" />
-     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
      <None Include="Assets\Photon Unity Networking\Demos\DemoBoxes\Resources\eurof_tt.txt" />
      <None Include="Assets\BattleDragon\Colosseum\Dust\ParticleSystems\Shaders\PriorityParticleAddSoft.shader" />
      <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
