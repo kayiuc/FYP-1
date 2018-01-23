@@ -28,6 +28,20 @@ public class PhotonNetworkManager : MonoBehaviour {
         void Start()
         {
             PhotonNetwork.ConnectUsingSettings("1.0");
+            SceneManager.sceneLoaded += (scene,loadscene) =>
+            {
+                if(SceneManager.GetActiveScene().name == "Game")
+                {
+                    Spawn();
+                }
+            };
+        }
+
+        void Spawn()
+        {
+            GameObject g = PhotonNetwork.Instantiate("dragon",new Vector3(0.64f,0.49f,5.18f),Quaternion.identity,0);
+            //This part loaded the character into game, we can load different character as long as changing the the first parameter
+            //GameObject.FindGameObjectWithTag("MainCamera").GetComponent<>().target = g.transform;
         }
 
         public void ButtonEvents(string EVENT)

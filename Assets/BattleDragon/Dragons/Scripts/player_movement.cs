@@ -1,109 +1,97 @@
 ﻿using UnityEngine;
+using CnControls;
 
 namespace SwordWorld
 {
     public class player_movement
         : MonoBehaviour
     {
-        public float walk_speed = 6f;
-        public float run_speed = 12f;
-
-
+        public float WalkSpeed = 8f;
+        public float RunSpeed = 12f;
+        public float TurnSmooth = 3.0f;
+        public float JumpHeight = 5.0f;
+        public float JumpCooldown = 1.0f;
+        private bool IsJump;
+        private bool IsWalk;
+        private bool IsRun;
         private Vector3 movement;
         private Animator animator;
         private Rigidbody playerRigidbody;
-
-        // rotate
-        public float turnSmoothing = 3.0f;
         private Transform cameraTransform;
-        private bool isWalk;
-        private bool isRun;
         private float h;
         private float v;
-
-        // jump
-        public float jumpHeight = 5.0f;
-        public float jumpCooldown = 1.0f;
-        private bool isJump;
         
         void Awake()
         {
-            // Set up references.
+            DontDestroyOnLoad(gameObject.transform);
             animator = GetComponent<Animator>();
             playerRigidbody = GetComponent<Rigidbody>();
-
             cameraTransform = Camera.main.transform;
         }
 
         void Update()
         {
-            h = Input.GetAxisRaw("Horizontal");
-            v = Input.GetAxisRaw("Vertical");
-            isJump = Input.GetButtonDown("Jump");
-            isWalk = Mathf.Abs(h) > 0.1 || Mathf.Abs(v) > 0.1;
+            h = CnInputManager.GetAxis("Horizontal");
+            v = CnInputManager.GetAxis("Vertical");
+            IsJump = Input.GetButtonDown("Jump");
+            IsWalk = Mathf.Abs(h) > 0.001 || Mathf.Abs(v) > 0.001;
 
-            if (isWalk)
+            if (IsWalk)
             {
-                if (isRun)
+                if (IsRun)
                 {
-                    isRun = !Input.GetButtonUp("Run");
+                    IsRun = !CnInputManager.GetButtonDown("Run");
                 }
                 else
                 {
-                    isRun = Input.GetButtonDown("Run");
+                    IsRun = CnInputManager.GetButtonDown("Run");
                 }
             }
             else
             {
-                isRun = false;
+                IsRun = false;
             }
         }
 
         void FixedUpdate()
         {
-            // Move the player around the scene.
             Move(h, v);
 
-            // Turn the player to face the mouse cursor. 
             Rotate(h, v);
 
-            // Jump
             Jump(h, v);
         }
 
         void Move(float h, float v)
         {
-            float speed = isRun ? run_speed : walk_speed;
+            float speed = IsRun ? RunSpeed : WalkSpeed;
 
-            // Set the movement vector based on the axis input.
+
             movement.Set(h, 0.0f, v);
 
-            // Normalise the movement vector and make it proportional to the speed per second.
             movement = movement.normalized * speed * Time.deltaTime;
 
-            // Move the player to it's current position plus the movement.
             playerRigidbody.MovePosition(transform.position + movement);
 
-            // Animator
             {
-                if (isRun)
+                if (IsRun)
                 {
-                    animator.SetBool("IsRun", isRun);
+                    animator.SetBool("IsRun", IsRun);
                 }
                 else
                 {
-                    animator.SetBool("IsRun", isRun);
-                    animator.SetBool("IsWalk", isWalk);
+                    animator.SetBool("IsRun", IsRun);
+                    animator.SetBool("IsWalk", IsWalk);
                 }
             }
         }
 
         void Jump(float h, float v)
         {
-            if (isJump)
+            if (IsJump)
             {
                 animator.SetTrigger("Jump");
-                playerRigidbody.velocity = new Vector3(0, jumpHeight, 0);
+                playerRigidbody.velocity = new Vector3(0, JumpHeight, 0);
             }
         }
 
@@ -117,13 +105,12 @@ namespace SwordWorld
             Vector3 targetDirection;
             targetDirection = forward * v + right * h;
 
-            if ((isWalk && targetDirection != Vector3.zero))
+            if ((IsWalk && targetDirection != Vector3.zero))
             {
                 Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
 
-                Quaternion newRotation = Quaternion.Slerp(GetComponent<Rigidbody>().rotation, targetRotation, turnSmoothing * Time.deltaTime);
+                Quaternion newRotation = Quaternion.Slerp(GetComponent<Rigidbody>().rotation, targetRotation, TurnSmooth * Time.deltaTime);
 
-                // TODO：不知为毛，Rigid 的约束不起作用，只能手动设置为 0 
                 newRotation.x = 0f;
                 newRotation.z = 0f;
                 GetComponent<Rigidbody>().MoveRotation(newRotation);
